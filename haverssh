@@ -1,0 +1,29 @@
+#!/bin/bash
+if [[ $1 == "" ]]; then
+  echo "what is your username?"
+  read user
+  #statements
+else
+  user=$1
+fi
+declare -a names=("dean" "milner" "lies" "deceit" "this" "that" "more")
+
+result=1
+while [[ result != 0 ]]; do
+  length=${#names[@]}
+  candidateIndex=$(($RANDOM * $length / 32000))  # %RANDOM is on (0...32000)
+  echo "connecting to ${names[$candidateIndex]} with with index $candidateIndex"
+  $(exec ssh "$user@${names[$candidateIndex]}.cs.haverford.edu")
+
+  if [[ $? != 0 ]]; then
+    echo "failed to connect... Let's try another one!"
+    declare -a new_names
+    for name in ${names[@]}; do
+      if [[ $name != ${names[$candidateIndex]} ]]; then
+        new_names+=name
+      fi
+    done
+    names=new_names
+    unset new_names
+  fi
+done
