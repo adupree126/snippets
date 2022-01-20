@@ -2,20 +2,18 @@
 if [[ $1 == "" ]]; then
   echo "what is your username?"
   read user
-  #statements
 else
   user=$1
 fi
-declare -a names=("blum" "lovelace" "cook" "dean" "hopper" "von\ ahn" "sweeney"
+declare -a names=("blum" "lovelace" "cook" "dean" "hopper" "von ahn" "sweeney"
                   "yao" "cerf" "hamilton" "mouton" "pnueli" "corbato" "liskov"
                   "curry" "easley" "kruskal" "church")
-
 result=1
 while [[ result != 0 ]]; do
   length=${#names[@]}
   candidateIndex=$(($RANDOM * $length / 32000))  # %RANDOM is on (0...32000)
-  echo "connecting to ${names[$candidateIndex]} with with index $candidateIndex"
-  $(exec ssh -Y "$user@${names[$candidateIndex]}.cs.haverford.edu")
+  echo "connecting to ${names[$candidateIndex]}"
+  exec ssh -Y "$user@${names[$candidateIndex]}.cs.haverford.edu"
 
   if [[ $? != 0 ]]; then
     echo "failed to connect... Let's try another one!"
@@ -29,3 +27,5 @@ while [[ result != 0 ]]; do
     unset new_names
   fi
 done
+
+# Andy Dupree, 2021
