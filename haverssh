@@ -5,10 +5,10 @@ if [[ $1 == "" ]]; then
 else
   user=$1
 fi
-declare -a names=("blum" "lovelace" "cook" "dean" "hopper" "von ahn" "sweeney"
+declare -a names=("blum" "lovelace" "cook" "dean" "hopper" "von\ ahn" "sweeney"
                   "yao" "cerf" "hamilton" "mouton" "pnueli" "corbato" "liskov"
                   "curry" "easley" "kruskal" "church")
-$?=1
+
 while [[ $? != 0 ]]; do
   length=${#names[@]}
   candidateIndex=$(($RANDOM * $length / 32000))  # %RANDOM is on (0...32000)
