@@ -1,0 +1,48 @@
+#!/bin/bash
+# Automatically clone git packages to path specified by environment variable PACGIT_GIT_DIR
+# e.g. PACGIT_DEST_DIR="/home/john/repos/" where subdirectories of repos/ are to be git repos
+# defaults to ~/
+VERSION=0.1
+HELP_FILE="help.txt"
+if [[ -e PACGIT_DEST_DIR ]]; then
+    echo "must set PACGIT_DEST_DIR environment variable" >&2
+    exit 2
+fi 
+
+# get paramaters
+#   -V | --version
+#   -v | --verbose
+#   -r | --recursive (clone submodules)
+#   -h | --help 
+while [[ $1 =~ ^- && "$1" == "--" ]]; do case $1 in
+    -V | --version )
+        exec echo $VERSION
+        ;;
+    -h | --help )
+        exec cat $HELP_FILE
+        ;;
+    -v | --verbose )
+        verbose=true
+        ;;
+    -r | --recursive )
+        recursive=true
+        ;;
+    * )
+        echo "unrecognized argument: $1" >&2
+        echo "try pacgit -h to list options" >&2
+        exit 1
+        ;;
+    esac;
+    shift;
+done
+
+# don't know what this is but https://devhints.io/bash has it
+if [[ "$1" == '--' ]]; then shift; fi
+    
+
+# $1 should a git repositor URL
+git clone                                       \
+    `if $verbose; then "--verbose"; fi`            \
+    `if $recursive; then "--recursive"; fi`        \
+    $1
+    $PACGIT_GIT_DIR || echo "bad repository"; exit 3
